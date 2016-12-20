@@ -5,12 +5,26 @@
 
 # Read more: https://github.com/cyu/rack-cors
 
-Rails.application.config.middleware.insert_before 0, Rack::Cors do
-  allow do
-    origins '*'
+class Application < Rails::Application
 
-    resource '/api/v1/games/*',
-      headers: :any,
-      methods: [:get, :post, :delete, :options, :head]
+  # ...
+
+  # Rails 3/4
+
+  config.middleware.insert_before 0, "Rack::Cors" do
+    allow do
+      origins '*'
+      resource '*', :headers => :any, :methods => [:get, :post, :options]
+    end
   end
+
+  # Rails 5
+
+  config.middleware.insert_before 0, Rack::Cors do
+    allow do
+      origins '*'
+      resource '*', :headers => :any, :methods => [:get, :post, :options]
+    end
+  end
+
 end
